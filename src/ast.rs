@@ -7,7 +7,7 @@ pub type Identifier = String;
 #[derive(Debug, Clone, PartialEq)]
 pub enum Statement {
     Return {
-        value: Expression,
+        value: Option<Expression>,
     },
     FunctionDeclaration {
         name: Identifier,
@@ -24,8 +24,8 @@ pub enum Statement {
         otherwise: Option<Block>,
     },
     Loop {
-        iterable: Expression,
-        value: Identifier,
+        iterable: Option<Expression>,
+        value: Option<Identifier>,
         then: Block,
     },
     Expression {
@@ -52,7 +52,6 @@ pub enum Expression {
     Get(Box<Expression>, Identifier),
     Index(Box<Expression>, Option<Box<Expression>>),
     List(Vec<Expression>),
-    Null,
 }
 
 impl Expression {

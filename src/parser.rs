@@ -74,32 +74,43 @@ impl<'p> Parser<'p> {
             Token::Let => self.parse_let(),
             Token::If => self.parse_if(),
             Token::Loop => self.parse_loop(),
-            Token::Return => {
-                self.expect_token_and_read(Token::Return)?;
-
-                if let Ok(expression) = self.parse_expression(Precedence::Lowest) {
-                    Ok(Statement::Return { value: expression })
-                } else {
-                    Ok(Statement::Return {
-                        // TODO: there is no thing called 'Null'
-                        value: Expression::Null,
-                    })
-                }
-            }
+            Token::Return => self.parse_return(),
             _ => Ok(Statement::Expression {
                 expression: self.parse_expression(Precedence::Lowest)?,
             }),
         }
     }
 
+    fn parse_return(&mut self) -> Result<Statement, ParseError> {
+        self.expect_token_and_read(Token::Return)?;
+
+        let value = match self.parse_expression(Precedence::Lowest) {
+            Ok(val) => Some(val),
+            Err(_e) => None,
+        };
+        Ok(Statement::Return { value })
+    }
+
     fn parse_loop(&mut self) -> Result<Statement, ParseError> {
         self.expect_token_and_read(Token::Loop)?;
 
-        let value = self.expect_identifier_and_read()?.into();
+        let (value, iterable) = if self.current_is(Token::LeftParen) {
+            self.expect_token_and_read(Token::LeftParen)?;
 
-        self.expect_token_and_read(Token::Colon)?;
+            self.expect_token_and_read(Token::Let)?;
 
-        let iterable = self.parse_expression(Precedence::Statement)?;
+            let val = self.expect_identifier_and_read()?.into();
+
+            self.expect_token_and_read(Token::Colon)?;
+
+            let itr = self.parse_expression(Precedence::Statement)?.into();
+
+            self.expect_token_and_read(Token::RightParen)?;
+
+            (Some(val), itr)
+        } else {
+            (None, None)
+        };
 
         let then = self.parse_block()?;
 
@@ -115,10 +126,6 @@ impl<'p> Parser<'p> {
             Token::String(s) => {
                 self.expect_token_and_read(Token::String("".to_string()))?;
                 Expression::String(s.to_string())
-            }
-            Token::Null => {
-                self.expect_token_and_read(Token::Null)?;
-                Expression::Null
             }
             Token::Number(n) => {
                 self.expect_token_and_read(Token::Number(0.0))?;

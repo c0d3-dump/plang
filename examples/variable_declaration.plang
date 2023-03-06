@@ -5,4 +5,4 @@ let z = false
 x = x + 2.0
 z = true
 
-let l[] = [1]
+let l = []
