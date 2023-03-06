@@ -1,0 +1,8 @@
+let x = 1
+let y = "Hello"
+let z = false
+
+x = x + 2.0
+z = true
+
+let l[] = [1]
