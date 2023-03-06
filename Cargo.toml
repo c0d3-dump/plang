@@ -1,0 +1,12 @@
+[package]
+name = "pcli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = "4.1.8"
+crossterm = "0.26.1"
+hashbrown = "0.13.2"
+http = "0.2.9"
+logos = "0.12.1"
+thiserror = "1.0.38"
