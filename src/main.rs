@@ -28,5 +28,5 @@ fn main() {
     let lex = Token::lexer(&content);
     // lex.clone().for_each(|f| println!("{:?}", f));
     let out = parse(lex.collect());
-    println!("{:?}", out);
+    println!("{:#?}", out);
 }
