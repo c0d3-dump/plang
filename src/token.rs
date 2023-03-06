@@ -28,8 +28,6 @@ pub enum Token {
     True,
     #[token("false")]
     False,
-    #[token("null")]
-    Null,
 
     #[regex(r"([0-9]+[.])?[0-9]+", to_float)]
     Number(f64),
