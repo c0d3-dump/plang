@@ -5,14 +5,14 @@ use crate::nom_parser::{
 
 use nom::{
     branch::alt,
-    bytes::complete::tag,
-    character::complete::{alphanumeric0, alphanumeric1, digit1, space0, space1},
-    sequence::tuple,
+    bytes::complete::{tag, take_until},
+    character::complete::{alphanumeric1, digit1, space0, space1},
+    sequence::{delimited, tuple},
     IResult,
 };
 
 fn parse_string(input: &str) -> IResult<&str, Expression> {
-    let (input, (_, x, _)) = tuple((tag("\""), alphanumeric0, tag("\"")))(input)?;
+    let (input, x) = delimited(tag("\""), take_until("\""), tag("\""))(input)?;
     Ok((input, Expression::String(String::from(x))))
 }
 
@@ -56,12 +56,12 @@ mod tests {
     #[test]
     fn test1() {
         assert_eq!(
-            parse_let("let x = \"Hello\""),
+            parse_let("let x = \" Hello\""),
             Ok((
                 "",
                 Statement::Let {
                     name: String::from("x"),
-                    initial: Expression::String(String::from("Hello"))
+                    initial: Expression::String(String::from(" Hello"))
                 }
             ))
         );
