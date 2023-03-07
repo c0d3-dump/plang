@@ -1,14 +1,11 @@
 use std::env;
 use std::fs;
 
-use logos::Logos;
-use parser::parse;
-use token::Token;
+// use logos::Logos;
+// use token::Token;
 
-mod ast;
-mod parser;
-mod token;
-
+mod nom_parser;
+// mod token;
 fn main() {
     let args = env::args().nth(1);
 
@@ -25,8 +22,8 @@ fn main() {
         panic!("File not found!");
     };
 
-    let lex = Token::lexer(&content);
+    // let lex = Token::lexer(&content);
     // lex.clone().for_each(|f| println!("{:?}", f));
-    let out = parse(lex.collect());
-    println!("{:#?}", out);
+    // let out = parse(lex.collect());
+    // println!("{:#?}", out);
 }
