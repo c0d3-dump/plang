@@ -1,4 +1,4 @@
-use crate::nom_parser::ast::Expression;
+use crate::parser::ast::Expression;
 
 use nom::{
     branch::alt,

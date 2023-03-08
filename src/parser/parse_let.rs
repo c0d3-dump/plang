@@ -1,5 +1,6 @@
-use crate::nom_parser::parser::tools::parse_value;
-use crate::nom_parser::{ast::Statement, token as Token};
+use crate::parser::ast::Statement;
+use crate::parser::tools::parse_value;
+use crate::token::Token;
 
 use nom::sequence::preceded;
 use nom::{
@@ -30,7 +31,7 @@ pub fn parse_let(input: &str) -> IResult<&str, Statement> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::nom_parser::ast::Expression;
+    use crate::parser::ast::Expression;
 
     #[test]
     fn test1() {
