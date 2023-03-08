@@ -1,5 +1,3 @@
-use hashbrown::HashMap;
-
 pub type Program = Vec<Statement>;
 pub type Block = Vec<Statement>;
 pub type Identifier = String;
@@ -49,12 +47,17 @@ pub enum Expression {
     Infix(Box<Expression>, Op, Box<Expression>),
     Prefix(Op, Box<Expression>),
     List(Vec<Expression>),
+    Dict(Vec<(Expression, Expression)>),
 }
 
-// TODO: implement advance expression based on hashmap
-#[derive(Debug)]
-pub enum HashExpression {
-    Dict(HashMap<Expression, Expression>),
+impl Expression {
+    pub fn some(self) -> Option<Self> {
+        Some(self)
+    }
+
+    pub fn boxed(self) -> Box<Self> {
+        Box::new(self)
+    }
 }
 
 #[derive(Debug, PartialEq)]

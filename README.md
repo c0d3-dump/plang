@@ -1,2 +1,2 @@
 # pcli
-pcli is a toll to easily create and share cli tools with world
+pcli is a tool to easily create and share cli tools with world
