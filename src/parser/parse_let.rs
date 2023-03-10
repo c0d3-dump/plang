@@ -1,30 +1,23 @@
-use crate::parser::ast::{Expression, Statement};
+use crate::parser::ast::Statement;
 use crate::parser::tools::parse_value;
 use crate::parser::tools::{parse_identifier, parse_tag};
 use crate::token::Token;
 
-use nom::sequence::preceded;
-use nom::{
-    character::complete::{space0, space1},
-    IResult,
-};
+use nom::IResult;
 
 pub fn parse_let(input: &str) -> IResult<&str, Statement> {
     let (input, ..) = parse_tag(Token::LET)(input)?;
 
-    let (input, x) = preceded(space1, parse_identifier)(input)?;
+    let (input, x) = parse_identifier(input)?;
 
     let (input, ..) = parse_tag(Token::ASSIGN)(input)?;
 
-    let (input, y) = preceded(space0, parse_value)(input)?;
+    let (input, y) = parse_value(input)?;
 
     Ok((
         input,
         Statement::Let {
-            name: match x {
-                Expression::Identifier(g) => g,
-                _ => panic!(),
-            },
+            name: x,
             initial: y,
         },
     ))
@@ -42,7 +35,7 @@ mod tests {
             Ok((
                 "",
                 Statement::Let {
-                    name: String::from("x"),
+                    name: Expression::Identifier(String::from("x")),
                     initial: Expression::String(String::from(" Hello"))
                 }
             ))
@@ -56,7 +49,7 @@ mod tests {
             Ok((
                 "",
                 Statement::Let {
-                    name: String::from("x"),
+                    name: Expression::Identifier(String::from("x")),
                     initial: Expression::Infix(
                         Expression::Number(10.0).boxed(),
                         Op::Add,
@@ -79,7 +72,7 @@ mod tests {
             Ok((
                 "",
                 Statement::Let {
-                    name: String::from("x"),
+                    name: Expression::Identifier(String::from("x")),
                     initial: Expression::Boolean(true)
                 }
             ))
@@ -93,7 +86,7 @@ mod tests {
             Ok((
                 "",
                 Statement::Let {
-                    name: String::from("x1"),
+                    name: Expression::Identifier(String::from("x1")),
                     initial: Expression::String(String::from("10"))
                 }
             ))
@@ -107,7 +100,7 @@ mod tests {
             Ok((
                 "",
                 Statement::Let {
-                    name: String::from("x"),
+                    name: Expression::Identifier(String::from("x")),
                     initial: Expression::Infix(
                         Expression::Infix(
                             Expression::Identifier(String::from("y")).boxed(),

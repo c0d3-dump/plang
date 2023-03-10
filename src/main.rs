@@ -1,9 +1,11 @@
 use std::env;
 use std::fs;
 
+use parser::parse;
+
 mod parser;
 mod token;
-// mod token;
+
 fn main() {
     let args = env::args().nth(1);
 
@@ -19,4 +21,14 @@ fn main() {
     } else {
         panic!("File not found!");
     };
+
+    println!("{:#?}", &content);
+
+    match parse(&content) {
+        Ok((input, output)) => {
+            println!("{:#?}", input);
+            println!("{:#?}", output);
+        }
+        Err(_e) => panic!(),
+    }
 }

@@ -1,8 +1,9 @@
-let x = 1
+let x = letx
 let y = "Hello"
 let z = false
 
-x = x + 2.0
-z = true
+if z != true and  t == 1 or f == z{ 
+   let z = "good" 
+} else {
 
-let l = []
+}

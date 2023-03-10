@@ -1,11 +1,10 @@
 pub type Program = Vec<Statement>;
 pub type Block = Vec<Statement>;
-pub type Identifier = String;
 
 #[derive(Debug, PartialEq)]
 pub enum Statement {
     Let {
-        name: Identifier,
+        name: Expression,
         initial: Expression,
     },
     If {
@@ -17,13 +16,13 @@ pub enum Statement {
         then: Option<Block>,
     },
     Fn {
-        name: Identifier,
+        name: Expression,
         params: Vec<Parameter>,
         body: Block,
     },
     Loop {
         iterable: Option<Expression>,
-        value: Option<Identifier>,
+        value: Option<Expression>,
         then: Block,
     },
     Expr {
@@ -41,7 +40,7 @@ pub enum Expression {
     Number(f64),
     String(String),
     Boolean(bool),
-    Identifier(Identifier),
+    Identifier(String),
     Assign(Box<Expression>, Box<Expression>),
     Call(Box<Expression>, Vec<Expression>),
     Infix(Box<Expression>, Op, Box<Expression>),
@@ -67,7 +66,6 @@ pub enum Op {
     Multiply,
     Divide,
     Modulo,
-    Bang,
     Equals,
     NotEquals,
     Assign,
@@ -77,4 +75,5 @@ pub enum Op {
     GreaterThanOrEquals,
     And,
     Or,
+    Not,
 }
