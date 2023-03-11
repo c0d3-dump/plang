@@ -1,4 +1,3 @@
-pub type Program = Vec<Statement>;
 pub type Block = Vec<Statement>;
 
 #[derive(Debug, PartialEq)]
@@ -12,12 +11,9 @@ pub enum Statement {
         then: Block,
         otherwise: Option<Block>,
     },
-    Else {
-        then: Option<Block>,
-    },
     Fn {
         name: Expression,
-        params: Vec<Parameter>,
+        params: Vec<Expression>,
         body: Block,
     },
     Loop {
@@ -28,11 +24,6 @@ pub enum Statement {
     Expr {
         expression: Expression,
     },
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Parameter {
-    pub name: String,
 }
 
 #[derive(Debug, PartialEq)]

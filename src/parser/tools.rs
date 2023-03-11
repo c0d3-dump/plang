@@ -7,9 +7,9 @@ use nom::{
     bytes::complete::{tag, take_until},
     character::complete::{alpha1, alphanumeric1, multispace0},
     combinator::peek,
-    multi::many0,
+    multi::{many0, separated_list0},
     number::complete::double,
-    sequence::{delimited, preceded, tuple},
+    sequence::{delimited, preceded, separated_pair, tuple},
     IResult,
 };
 
@@ -27,7 +27,34 @@ pub fn parse_identifier(input: &str) -> IResult<&str, Expression> {
 }
 
 pub fn parse_value(input: &str) -> IResult<&str, Expression> {
-    parse_math_expr(input)
+    alt((parse_string, parse_boolean, parse_math_expr))(input)
+}
+
+pub fn parse_iterator(input: &str) -> IResult<&str, Expression> {
+    alt((parse_list, parse_dict))(input)
+}
+
+pub fn parse_call(input: &str) -> IResult<&str, Expression> {
+    let (input, (x, y)) = tuple((
+        parse_identifier,
+        delimited(
+            parse_tag(Token::LEFT_PAREN),
+            separated_list0(
+                parse_tag(Token::COMMA),
+                alt((
+                    parse_string,
+                    parse_number,
+                    parse_boolean,
+                    parse_identifier,
+                    parse_iterator,
+                    parse_call,
+                )),
+            ),
+            parse_tag(Token::RIGHT_PAREN),
+        ),
+    ))(input)?;
+
+    Ok((input, Expression::Call(x.boxed(), y)))
 }
 
 // ****************
@@ -35,22 +62,59 @@ pub fn parse_value(input: &str) -> IResult<&str, Expression> {
 // ****************
 
 fn parse_string(input: &str) -> IResult<&str, Expression> {
-    let (input, x) = delimited(tag("\""), take_until("\""), tag("\""))(input)?;
+    let (input, x) = preceded(
+        multispace0,
+        delimited(tag("\""), take_until("\""), tag("\"")),
+    )(input)?;
     Ok((input, Expression::String(String::from(x))))
 }
 
 fn parse_number(input: &str) -> IResult<&str, Expression> {
-    let (input, x) = double(input)?;
+    let (input, x) = preceded(multispace0, double)(input)?;
     Ok((input, Expression::Number(x)))
 }
 
 fn parse_boolean(input: &str) -> IResult<&str, Expression> {
-    let (input, x) = alt((tag("true"), tag("false")))(input)?;
+    let (input, x) = preceded(multispace0, alt((tag("true"), tag("false"))))(input)?;
     Ok((input, Expression::Boolean(x.parse().unwrap())))
 }
 
+fn parse_list(input: &str) -> IResult<&str, Expression> {
+    let (input, x) = delimited(
+        parse_tag(Token::LEFT_BRACKET),
+        separated_list0(
+            parse_tag(Token::COMMA),
+            alt((
+                parse_string,
+                parse_number,
+                parse_boolean,
+                parse_identifier,
+                parse_list,
+            )),
+        ),
+        parse_tag(Token::RIGHT_BRACKET),
+    )(input)?;
+    Ok((input, Expression::List(x)))
+}
+
+fn parse_dict(input: &str) -> IResult<&str, Expression> {
+    let (input, x) = delimited(
+        parse_tag(Token::LEFT_BRACE),
+        separated_list0(
+            parse_tag(Token::COMMA),
+            separated_pair(
+                alt((parse_number, parse_boolean, parse_identifier)),
+                parse_tag(Token::COLON),
+                alt((parse_value, parse_iterator)),
+            ),
+        ),
+        parse_tag(Token::RIGHT_BRACE),
+    )(input)?;
+    Ok((input, Expression::Dict(x)))
+}
+
 fn parse_raw_value(input: &str) -> IResult<&str, Expression> {
-    alt((parse_number, parse_string, parse_boolean, parse_identifier))(input)
+    alt((parse_number, parse_call, parse_identifier))(input)
 }
 
 fn parse_parens(input: &str) -> IResult<&str, Expression> {
@@ -62,7 +126,7 @@ fn parse_parens(input: &str) -> IResult<&str, Expression> {
 }
 
 fn parse_operation(input: &str) -> IResult<&str, Expression> {
-    alt((parse_parens, preceded(multispace0, parse_raw_value)))(input)
+    alt((parse_parens, parse_raw_value))(input)
 }
 
 fn parse_assignment(input: &str) -> IResult<&str, Expression> {
