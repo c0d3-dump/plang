@@ -5,6 +5,7 @@ use parse_block::parse_items;
 
 mod ast;
 mod parse_block;
+mod parse_fn;
 mod parse_if;
 mod parse_let;
 mod parse_loop;

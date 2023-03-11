@@ -9,9 +9,10 @@ use nom::IResult;
 
 use super::parse_if::parse_if;
 use super::parse_let::parse_let;
+use super::parse_loop::parse_loop;
 
 pub fn parse_items(input: &str) -> IResult<&str, Vec<Statement>> {
-    many0(alt((parse_let, parse_if)))(input)
+    many0(alt((parse_let, parse_if, parse_loop)))(input)
 }
 
 pub fn parse_block(input: &str) -> IResult<&str, Vec<Statement>> {

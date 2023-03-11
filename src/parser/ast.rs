@@ -1,4 +1,3 @@
-pub type Program = Vec<Statement>;
 pub type Block = Vec<Statement>;
 
 #[derive(Debug, PartialEq)]
@@ -11,9 +10,6 @@ pub enum Statement {
         condition: Expression,
         then: Block,
         otherwise: Option<Block>,
-    },
-    Else {
-        then: Option<Block>,
     },
     Fn {
         name: Expression,

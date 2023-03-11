@@ -1,8 +1,8 @@
 use crate::parser::ast::Statement;
-use crate::parser::tools::parse_value;
-use crate::parser::tools::{parse_identifier, parse_tag};
+use crate::parser::tools::{parse_identifier, parse_iterator, parse_tag, parse_value};
 use crate::token::Token;
 
+use nom::branch::alt;
 use nom::IResult;
 
 pub fn parse_let(input: &str) -> IResult<&str, Statement> {
@@ -12,7 +12,7 @@ pub fn parse_let(input: &str) -> IResult<&str, Statement> {
 
     let (input, ..) = parse_tag(Token::ASSIGN)(input)?;
 
-    let (input, y) = parse_value(input)?;
+    let (input, y) = alt((parse_value, parse_iterator))(input)?;
 
     Ok((
         input,
@@ -96,7 +96,7 @@ mod tests {
     #[test]
     fn test5() {
         assert_eq!(
-            parse_let("let x = (y + z) * k"),
+            parse_let("let x = (y + 1.0) * k"),
             Ok((
                 "",
                 Statement::Let {
@@ -105,7 +105,7 @@ mod tests {
                         Expression::Infix(
                             Expression::Identifier(String::from("y")).boxed(),
                             Op::Add,
-                            Expression::Identifier(String::from("z")).boxed(),
+                            Expression::Number(1.0).boxed(),
                         )
                         .boxed(),
                         Op::Multiply,
@@ -124,5 +124,75 @@ mod tests {
             }
             Err(_e) => {}
         }
+    }
+
+    #[test]
+    fn test7() {
+        assert_eq!(
+            parse_let("let x = [1, \"Hello\", true, a]"),
+            Ok((
+                "",
+                Statement::Let {
+                    name: Expression::Identifier(String::from("x")),
+                    initial: Expression::List(vec![
+                        Expression::Number(1.0),
+                        Expression::String(String::from("Hello")),
+                        Expression::Boolean(true),
+                        Expression::Identifier(String::from("a")),
+                    ])
+                }
+            ))
+        );
+    }
+
+    #[test]
+    fn test8() {
+        assert_eq!(
+            parse_let("let x = [1, [2, 3, [5]]]"),
+            Ok((
+                "",
+                Statement::Let {
+                    name: Expression::Identifier(String::from("x")),
+                    initial: Expression::List(vec![
+                        Expression::Number(1.0),
+                        Expression::List(vec![
+                            Expression::Number(2.0),
+                            Expression::Number(3.0),
+                            Expression::List(vec![Expression::Number(5.0),]),
+                        ]),
+                    ])
+                }
+            ))
+        );
+    }
+
+    #[test]
+    fn test9() {
+        assert_eq!(
+            parse_let("let x = { x: 1, y: false, 1: [1, 2] }"),
+            Ok((
+                "",
+                Statement::Let {
+                    name: Expression::Identifier(String::from("x")),
+                    initial: Expression::Dict(vec![
+                        (
+                            Expression::Identifier(String::from("x")),
+                            Expression::Number(1.0)
+                        ),
+                        (
+                            Expression::Identifier(String::from("y")),
+                            Expression::Boolean(false)
+                        ),
+                        (
+                            Expression::Number(1.0),
+                            Expression::List(vec![
+                                Expression::Number(1.0),
+                                Expression::Number(2.0),
+                            ])
+                        )
+                    ])
+                }
+            ))
+        );
     }
 }
