@@ -195,4 +195,24 @@ mod tests {
             ))
         );
     }
+
+    #[test]
+    fn test10() {
+        assert_eq!(
+            parse_let("let x = { l : mod(1) }"),
+            Ok((
+                "",
+                Statement::Let {
+                    name: Expression::Identifier(String::from("x")),
+                    initial: Expression::Dict(vec![(
+                        Expression::Identifier(String::from("l")),
+                        Expression::Call(
+                            Expression::Identifier(String::from("mod")).boxed(),
+                            vec![Expression::Number(1.0)]
+                        )
+                    )])
+                }
+            ))
+        );
+    }
 }

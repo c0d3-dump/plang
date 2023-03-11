@@ -34,6 +34,29 @@ pub fn parse_iterator(input: &str) -> IResult<&str, Expression> {
     alt((parse_list, parse_dict))(input)
 }
 
+pub fn parse_call(input: &str) -> IResult<&str, Expression> {
+    let (input, (x, y)) = tuple((
+        parse_identifier,
+        delimited(
+            parse_tag(Token::LEFT_PAREN),
+            separated_list0(
+                parse_tag(Token::COMMA),
+                alt((
+                    parse_string,
+                    parse_number,
+                    parse_boolean,
+                    parse_identifier,
+                    parse_iterator,
+                    parse_call,
+                )),
+            ),
+            parse_tag(Token::RIGHT_PAREN),
+        ),
+    ))(input)?;
+
+    Ok((input, Expression::Call(x.boxed(), y)))
+}
+
 // ****************
 // helper functions
 // ****************
@@ -91,7 +114,7 @@ fn parse_dict(input: &str) -> IResult<&str, Expression> {
 }
 
 fn parse_raw_value(input: &str) -> IResult<&str, Expression> {
-    alt((parse_number, parse_identifier))(input)
+    alt((parse_number, parse_call, parse_identifier))(input)
 }
 
 fn parse_parens(input: &str) -> IResult<&str, Expression> {

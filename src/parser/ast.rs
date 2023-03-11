@@ -13,7 +13,7 @@ pub enum Statement {
     },
     Fn {
         name: Expression,
-        params: Vec<Parameter>,
+        params: Vec<Expression>,
         body: Block,
     },
     Loop {
@@ -24,11 +24,6 @@ pub enum Statement {
     Expr {
         expression: Expression,
     },
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Parameter {
-    pub name: String,
 }
 
 #[derive(Debug, PartialEq)]
