@@ -169,7 +169,7 @@ mod tests {
     #[test]
     fn test9() {
         assert_eq!(
-            parse_let("let x = { x: 1, y: false, 1: [1, 2] }"),
+            parse_let("let x = { x: 1, y: false, 1: [1, 2], 2: { 3: false } }"),
             Ok((
                 "",
                 Statement::Let {
@@ -189,6 +189,13 @@ mod tests {
                                 Expression::Number(1.0),
                                 Expression::Number(2.0),
                             ])
+                        ),
+                        (
+                            Expression::Number(2.0),
+                            Expression::Dict(vec![(
+                                Expression::Number(3.0),
+                                Expression::Boolean(false)
+                            )])
                         )
                     ])
                 }

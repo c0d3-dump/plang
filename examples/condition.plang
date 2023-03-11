@@ -1,8 +1,10 @@
 
-let t = 5
-
-if t == 1 {
-
-} else {
-  
+fn main(t) {
+  if t == 1 {
+    return "Hell no"
+  } else {
+    return "okay"
+  }
 }
+
+let p = main(5)

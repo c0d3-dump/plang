@@ -1,9 +1,5 @@
-let x = letx
-let y = "Hello"
-let z = false
-
-if z != true and  t == 1 or f == z{ 
-   let z = "good" 
-} else {
-
-}
+let x1 = letx
+let x2 = "Hello"
+let x3 = false
+let x4 = [1, "Hello" , true, [2, false]]
+let x5 = { x : 1.0, y : "Hello", z : true , l: { 1.0: false }, z : [1  ,2 , 3]}

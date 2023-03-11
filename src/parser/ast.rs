@@ -38,6 +38,8 @@ pub enum Expression {
     Prefix(Op, Box<Expression>),
     List(Vec<Expression>),
     Dict(Vec<(Expression, Expression)>),
+    Break,
+    Return(Option<Box<Expression>>),
 }
 
 impl Expression {
@@ -59,7 +61,6 @@ pub enum Op {
     Modulo,
     Equals,
     NotEquals,
-    Assign,
     LessThan,
     GreaterThan,
     LessThanOrEquals,

@@ -1,8 +1,13 @@
 
-loop ( let i : [1,2,3] ) {
-
+loop i : [1,2,3] {
+  print("{i}")
 }
 
+let j = 0
 loop {
+  j = j + 1
 
+  if j > 10 {
+    print("End")
+  }
 }
