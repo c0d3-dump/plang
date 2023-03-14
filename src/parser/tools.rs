@@ -88,6 +88,7 @@ fn parse_list(input: &str) -> IResult<&str, Expression> {
                 parse_string,
                 parse_number,
                 parse_boolean,
+                parse_call,
                 parse_identifier,
                 parse_list,
             )),

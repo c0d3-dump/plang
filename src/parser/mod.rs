@@ -3,7 +3,7 @@ use nom::IResult;
 use ast::Statement;
 use parse_block::parse_items;
 
-mod ast;
+pub mod ast;
 mod parse_block;
 mod parse_expr;
 mod parse_fn;

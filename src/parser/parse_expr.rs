@@ -5,7 +5,7 @@ use crate::token::Token;
 
 use nom::branch::alt;
 use nom::character::complete::multispace1;
-use nom::sequence::{preceded, separated_pair, tuple};
+use nom::sequence::{preceded, separated_pair};
 use nom::IResult;
 
 fn parse_assignment(input: &str) -> IResult<&str, Expression> {
