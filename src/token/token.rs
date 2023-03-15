@@ -35,3 +35,6 @@ pub const COMMA: &str = ",";
 pub const DOT: &str = ".";
 pub const SEMICOLON: &str = ";";
 pub const COLON: &str = ":";
+
+pub const RETURN: &str = "return";
+pub const BREAK: &str = "break";

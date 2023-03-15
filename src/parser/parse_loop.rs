@@ -1,6 +1,6 @@
 use crate::parser::ast::{Expression, Statement};
 use crate::parser::parse_block::parse_block;
-use crate::parser::tools::{parse_identifier, parse_iterator, parse_tag, parse_value};
+use crate::parser::tools::{parse_identifier, parse_iterator, parse_tag};
 use crate::token::Token;
 
 use nom::branch::alt;

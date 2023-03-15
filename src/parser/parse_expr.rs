@@ -19,7 +19,6 @@ fn parse_assignment(input: &str) -> IResult<&str, Expression> {
 
 pub fn parse_expr(input: &str) -> IResult<&str, Statement> {
     let (input, x) = alt((parse_assignment, parse_call))(input)?;
-
     Ok((input, Statement::Expr { expression: x }))
 }
 

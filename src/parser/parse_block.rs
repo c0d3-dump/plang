@@ -4,6 +4,7 @@ use crate::parser::parse_fn::parse_fn;
 use crate::parser::parse_if::parse_if;
 use crate::parser::parse_let::parse_let;
 use crate::parser::parse_loop::parse_loop;
+use crate::parser::parse_return::{parse_break, parse_return};
 use crate::parser::tools::parse_tag;
 use crate::token::Token;
 
@@ -13,7 +14,15 @@ use nom::sequence::delimited;
 use nom::IResult;
 
 pub fn parse_items(input: &str) -> IResult<&str, Vec<Statement>> {
-    many0(alt((parse_let, parse_if, parse_loop, parse_fn, parse_expr)))(input)
+    many0(alt((
+        parse_let,
+        parse_if,
+        parse_loop,
+        parse_fn,
+        parse_expr,
+        parse_return,
+        parse_break,
+    )))(input)
 }
 
 pub fn parse_block(input: &str) -> IResult<&str, Vec<Statement>> {

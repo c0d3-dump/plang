@@ -1,9 +1,12 @@
 use std::env;
 use std::fs;
 
+use interpreter::interpret;
 use parser::parse;
 
+mod interpreter;
 mod parser;
+mod stdlib;
 mod token;
 
 fn main() {
@@ -22,13 +25,10 @@ fn main() {
         panic!("File not found!");
     };
 
-    println!("{:#?}", &content);
-
     match parse(&content) {
-        Ok((input, output)) => {
-            println!("{:#?}", input);
-            println!("{:#?}", output);
+        Ok((_, output)) => {
+            interpret(output);
         }
-        Err(_e) => panic!(),
+        Err(e) => panic!("{:#?}", e),
     }
 }

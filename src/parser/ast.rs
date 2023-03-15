@@ -1,6 +1,6 @@
 pub type Block = Vec<Statement>;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     Let {
         name: Expression,
@@ -24,9 +24,13 @@ pub enum Statement {
     Expr {
         expression: Expression,
     },
+    Return {
+        value: Option<Expression>,
+    },
+    Break,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
     Number(f64),
     String(String),
@@ -38,6 +42,7 @@ pub enum Expression {
     Prefix(Op, Box<Expression>),
     List(Vec<Expression>),
     Dict(Vec<(Expression, Expression)>),
+    Break,
 }
 
 impl Expression {
@@ -50,7 +55,7 @@ impl Expression {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Op {
     Add,
     Subtract,
@@ -59,7 +64,6 @@ pub enum Op {
     Modulo,
     Equals,
     NotEquals,
-    Assign,
     LessThan,
     GreaterThan,
     LessThanOrEquals,
