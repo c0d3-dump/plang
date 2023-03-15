@@ -2,6 +2,34 @@ let x = 10
 let y = "Hello"
 let z = true
 
-fn main(x) {
-  print("Hello")
+fn main(t, l) {
+  print(t, ": ")
+  print(l, "  ")
+  return t + 1
 }
+
+x = main(x, y) + main(x, y)
+print(x)
+
+if x > 20 {
+  print("working!")
+} else {
+  print("not working")
+}
+
+loop n : [1,2,3] {
+  print(n, " - ")
+  if n == 2 {
+    break
+  }
+}
+
+x = 1
+loop {
+  print("hi")
+  if x >= 5 {
+    break
+  }
+  x = x + 1
+}
+

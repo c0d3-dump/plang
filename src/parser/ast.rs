@@ -24,6 +24,10 @@ pub enum Statement {
     Expr {
         expression: Expression,
     },
+    Return {
+        value: Option<Expression>,
+    },
+    Break,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -39,7 +43,6 @@ pub enum Expression {
     List(Vec<Expression>),
     Dict(Vec<(Expression, Expression)>),
     Break,
-    Return(Option<Box<Expression>>),
 }
 
 impl Expression {

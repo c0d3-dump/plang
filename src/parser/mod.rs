@@ -10,6 +10,7 @@ mod parse_fn;
 mod parse_if;
 mod parse_let;
 mod parse_loop;
+mod parse_return;
 mod tools;
 
 pub fn parse(input: &str) -> IResult<&str, Vec<Statement>> {
