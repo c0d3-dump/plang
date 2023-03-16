@@ -328,7 +328,6 @@ impl Interpreter {
                 }
                 _ => panic!("Enter proper function name"),
             },
-            Expression::Dict(_) => todo!(),
             _ => panic!(),
         }
     }

@@ -41,7 +41,6 @@ pub enum Expression {
     Infix(Box<Expression>, Op, Box<Expression>),
     Prefix(Op, Box<Expression>),
     List(Vec<Expression>),
-    Dict(Vec<(Expression, Expression)>),
     Break,
 }
 

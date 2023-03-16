@@ -31,7 +31,7 @@ pub fn parse_value(input: &str) -> IResult<&str, Expression> {
 }
 
 pub fn parse_iterator(input: &str) -> IResult<&str, Expression> {
-    alt((parse_list, parse_dict))(input)
+    parse_list(input)
 }
 
 pub fn parse_call(input: &str) -> IResult<&str, Expression> {
@@ -96,22 +96,6 @@ fn parse_list(input: &str) -> IResult<&str, Expression> {
         parse_tag(Token::RIGHT_BRACKET),
     )(input)?;
     Ok((input, Expression::List(x)))
-}
-
-fn parse_dict(input: &str) -> IResult<&str, Expression> {
-    let (input, x) = delimited(
-        parse_tag(Token::LEFT_BRACE),
-        separated_list0(
-            parse_tag(Token::COMMA),
-            separated_pair(
-                alt((parse_number, parse_boolean, parse_identifier)),
-                parse_tag(Token::COLON),
-                alt((parse_value, parse_iterator)),
-            ),
-        ),
-        parse_tag(Token::RIGHT_BRACE),
-    )(input)?;
-    Ok((input, Expression::Dict(x)))
 }
 
 fn parse_raw_value(input: &str) -> IResult<&str, Expression> {

@@ -1,4 +1,4 @@
-use crate::parser::ast::Expression::{self, Boolean, Dict, List, Number, String};
+use crate::parser::ast::Expression::{self, Boolean, List, Number, String};
 
 pub fn run_print(input: &Expression) {
     match &input {
@@ -12,16 +12,6 @@ pub fn run_print(input: &Expression) {
                 print!(", ");
             }
             print!("]");
-        }
-        Dict(e) => {
-            print!("{{ ");
-            for (t1, t2) in e.iter() {
-                run_print(t1);
-                print!(" : ");
-                run_print(t2);
-                print!(", ");
-            }
-            print!("}}");
         }
         _ => panic!("Enter proper arguments"),
     }
