@@ -19,10 +19,14 @@ if x > 20 {
 
 loop n : [1,2,3] {
   print(n, " - ")
+  let p = true
+  x = x - 1
   if n == 2 {
     break
   }
 }
+
+print(x, " ")
 
 x = 1
 loop {
