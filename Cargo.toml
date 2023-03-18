@@ -2,13 +2,13 @@
 name = "pcli"
 version = "0.1.0"
 edition = "2021"
+default-run = "pcli"
+
+[[bin]]
+name = "pcli"
+path = "src/main.rs"
 
 [dependencies]
-clap = "4.1.8"
+clang = { path = "clang" }
+clap = { version = "4.1.10", features = ["derive"] }
 crossterm = "0.26.1"
-http = "0.2.9"
-logos = "0.12.1"
-nom = "7.1.3"
-nom_locate = "4.1.0"
-rayon = "1.7.0"
-thiserror = "1.0.38"

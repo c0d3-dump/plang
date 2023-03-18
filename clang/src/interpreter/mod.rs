@@ -5,18 +5,15 @@ use crate::stdlib::Std;
 
 fn register_globals(interpreter: &mut Interpreter) {
     interpreter.register_global("print", Std::Print);
+    interpreter.register_global("cmd", Std::Cmd);
 }
 
 pub fn interpret(input: Vec<Statement>) {
-    dbg!(&input);
-
     let mut interpreter = Interpreter::new(HashMap::new(), HashMap::new(), HashMap::new());
 
     register_globals(&mut interpreter);
 
     interpreter.run(input);
-
-    // dbg!(interpreter.variables);
 }
 
 type Block = Vec<Statement>;
@@ -146,6 +143,17 @@ impl Interpreter {
                                     }
                                 }
 
+                                let keys: Vec<String> =
+                                    i.variables.keys().map(|f| f.to_string()).collect();
+
+                                for k in keys {
+                                    if !self.variables.contains_key(&k) {
+                                        i.variables.remove(&k);
+                                    }
+                                }
+
+                                self.variables.extend(i.variables);
+
                                 match &temp {
                                     Some(Expression::Break) => None,
                                     _ => temp,
@@ -163,7 +171,7 @@ impl Interpreter {
                         self.variables.clone(),
                     );
 
-                    let t = loop {
+                    let temp = loop {
                         let l = i.run(then.clone());
 
                         match l {
@@ -172,9 +180,19 @@ impl Interpreter {
                         }
                     };
 
-                    match &t {
+                    let keys: Vec<String> = i.variables.keys().map(|f| f.to_string()).collect();
+
+                    for k in keys {
+                        if !self.variables.contains_key(&k) {
+                            i.variables.remove(&k);
+                        }
+                    }
+
+                    self.variables.extend(i.variables);
+
+                    match &temp {
                         Expression::Break => None,
-                        _ => Some(t),
+                        _ => Some(temp),
                     }
                 }
 
@@ -192,8 +210,6 @@ impl Interpreter {
                 self.evaluate(expression);
                 None
             }
-
-            _ => panic!(),
         }
     }
 
@@ -328,7 +344,6 @@ impl Interpreter {
                 }
                 _ => panic!("Enter proper function name"),
             },
-            Expression::Dict(_) => todo!(),
             _ => panic!(),
         }
     }

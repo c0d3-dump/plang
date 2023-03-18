@@ -100,26 +100,4 @@ mod tests {
             ))
         )
     }
-
-    #[test]
-    fn test4() {
-        assert_eq!(
-            parse_loop(" loop y : { 1 : \"H\", 2: true} { }"),
-            Ok((
-                "",
-                Statement::Loop {
-                    iterable: Expression::Identifier(String::from("y")).some(),
-                    value: Expression::Dict(vec![
-                        (
-                            Expression::Number(1.0),
-                            Expression::String(String::from("H"))
-                        ),
-                        (Expression::Number(2.0), Expression::Boolean(true)),
-                    ])
-                    .some(),
-                    then: vec![]
-                }
-            ))
-        )
-    }
 }
