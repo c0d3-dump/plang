@@ -1,11 +1,14 @@
 // use std::env;
-// use std::fs;
+use std::fs;
 
 // use clang::interpret;
 // use clang::parse;
 
 use args::PcliArgs;
 use clap::Parser;
+use command::list_command;
+
+use crate::command::RunCommand;
 
 mod args;
 mod command;
@@ -33,7 +36,28 @@ fn main() {
     //     Err(e) => panic!("{:#?}", e),
     // }
 
+    let maybe_list_content = fs::read_to_string("examples/applist.pla");
+
+    let list_content = match maybe_list_content {
+        Ok(t) => t,
+        Err(_) => panic!("something went wrong"),
+    };
+
+    let content = list_content.split_terminator(',').collect::<Vec<&str>>();
+
     let args = PcliArgs::parse();
 
-    println!("{:?}", args);
+    match args.cmd {
+        args::Cmd::Run(RunCommand { name }) => {
+            if content.contains(&name.as_ref()) {
+                println!("working");
+            } else {
+                println!("{name} app does not exists!");
+            }
+        }
+        args::Cmd::List => list_command(content),
+        args::Cmd::Install => todo!(),
+        args::Cmd::Search => todo!(),
+        args::Cmd::New => todo!(),
+    }
 }

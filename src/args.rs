@@ -6,17 +6,23 @@ use crate::command::RunCommand;
 #[clap(author, version, about)]
 pub struct PcliArgs {
     #[clap(subcommand)]
-    pub entity_type: EntityType,
+    pub cmd: Cmd,
 }
 
 #[derive(Debug, Subcommand)]
-pub enum EntityType {
+pub enum Cmd {
     /// run app
     Run(RunCommand),
 
     /// list all installed apps
     List,
 
+    /// install app
+    Install,
+
     /// search apps from registry
     Search,
+
+    /// create new app
+    New,
 }

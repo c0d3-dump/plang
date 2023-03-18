@@ -2,6 +2,8 @@ use clap::Args;
 
 #[derive(Debug, Args)]
 pub struct RunCommand {
-    /// enter name of app
+    /// name of app
     pub name: String,
 }
+
+pub fn run_command() {}
