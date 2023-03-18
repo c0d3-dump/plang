@@ -12,12 +12,15 @@ pub const ADDITION: &str = "+";
 pub const SUBTRACTION: &str = "-";
 pub const DIVIDE: &str = "/";
 pub const MULTIPLY: &str = "*";
-pub const REMAINDER: &str = "%";
-pub const POW: &str = "^";
+// TODO
+pub const _REMAINDER: &str = "%";
+// TODO
+pub const _POW: &str = "^";
 
 pub const AND: &str = "and";
 pub const OR: &str = "or";
-pub const NOT: &str = "not";
+// TODO
+pub const _NOT: &str = "not";
 
 pub const GREATER_THAN_EQUAL: &str = ">=";
 pub const LESS_THAN_EQUAL: &str = "<=";
@@ -32,8 +35,8 @@ pub const LEFT_BRACKET: &str = "[";
 pub const RIGHT_BRACKET: &str = "]";
 
 pub const COMMA: &str = ",";
-pub const DOT: &str = ".";
-pub const SEMICOLON: &str = ";";
+// TODO
+pub const _DOT: &str = ".";
 pub const COLON: &str = ":";
 
 pub const RETURN: &str = "return";

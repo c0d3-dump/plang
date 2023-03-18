@@ -9,7 +9,7 @@ use nom::{
     combinator::peek,
     multi::{many0, separated_list0},
     number::complete::double,
-    sequence::{delimited, preceded, separated_pair, tuple},
+    sequence::{delimited, preceded, tuple},
     IResult,
 };
 

@@ -4,16 +4,23 @@ pub use function::run_print;
 
 use crate::parser::ast::Expression;
 
+use self::function::run_cmd;
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Std {
     Print,
+    Cmd,
 }
 
 impl Std {
     pub fn run(&self, input: Vec<Expression>) {
         match self {
-            Self::Print => {
+            Std::Print => {
                 input.iter().for_each(|i| run_print(i));
+                println!();
+            }
+            Std::Cmd => {
+                run_cmd(input);
             }
         }
     }

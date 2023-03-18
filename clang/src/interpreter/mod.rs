@@ -5,6 +5,7 @@ use crate::stdlib::Std;
 
 fn register_globals(interpreter: &mut Interpreter) {
     interpreter.register_global("print", Std::Print);
+    interpreter.register_global("cmd", Std::Cmd);
 }
 
 pub fn interpret(input: Vec<Statement>) {

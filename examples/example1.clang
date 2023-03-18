@@ -1,6 +1,9 @@
 let x = 10
 let y = "Hello"
 let z = true
+let s = [1,2,3]
+
+print(s)
 
 fn main(t, l) {
   print(t, ": ")
